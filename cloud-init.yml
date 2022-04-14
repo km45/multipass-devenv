@@ -1,1 +1,4 @@
 #cloud-config
+packages:
+  - unzip
+  - zip
