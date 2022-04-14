@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    # Use macos-10.15 for VirtualBox (nested virtualization)
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v3
+      - run: brew install --cask multipass
+      - run: sudo multipass set local.driver=virtualbox
+      - name: Wait 30 seconds for multipassd ready
+        run: sleep 30s
+      - run: multipass launch 20.04 --cloud-init cloud-init.yml --name test-instance
+      - run: multipass transfer - test-instance:test.sh < test.sh
+      - run: multipass exec test-instance -- bash test.sh
+  status_check:
+    runs-on: ubuntu-20.04
+    needs:
+      - test
+    steps:
+      - run: echo 'pass'
