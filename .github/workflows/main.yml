@@ -6,6 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: sudo apt-add-repository --yes --update ppa:ansible/ansible
+      - run: sudo apt install --yes --no-install-recommends ansible-lint
+      - run: ansible-lint playbooks/site.yml
   test:
     # Use macos-10.15 for VirtualBox (nested virtualization)
     runs-on: macos-10.15
@@ -18,9 +24,12 @@ jobs:
       - run: multipass launch 20.04 --cloud-init cloud-init.yml --name test-instance
       - run: multipass transfer - test-instance:test.sh < test.sh
       - run: multipass exec test-instance -- bash test.sh
+      - run: multipass mount ./playbooks test-instance:/multipass/playbooks
+      - run: multipass exec test-instance -- ansible-playbook /multipass/playbooks/site.yml
   status_check:
     runs-on: ubuntu-20.04
     needs:
+      - lint
       - test
     steps:
       - run: echo 'pass'

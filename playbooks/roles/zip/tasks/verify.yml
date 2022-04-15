@@ -1,0 +1,8 @@
+---
+- name: verify command existence
+  command: bash -c "type {{ item }}"
+  changed_when: false
+  with_items:
+    - unzip
+    - zip
+    - zipinfo
