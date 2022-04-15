@@ -1,7 +1,4 @@
 #cloud-config
-packages:
-  - unzip
-  - zip
 runcmd:
   # Install Ansible
   # - [ "apt", "install", "software-properties-common" ]

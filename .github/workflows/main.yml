@@ -18,6 +18,8 @@ jobs:
       - run: multipass launch 20.04 --cloud-init cloud-init.yml --name test-instance
       - run: multipass transfer - test-instance:test.sh < test.sh
       - run: multipass exec test-instance -- bash test.sh
+      - run: multipass mount ./playbooks test-instance:/multipass/playbooks
+      - run: multipass exec test-instance -- ansible-playbook /multipass/playbooks/site.yml
   status_check:
     runs-on: ubuntu-20.04
     needs:
