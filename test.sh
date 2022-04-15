@@ -1,6 +1,10 @@
 #!/bin/bash
 set -eux
 
+function test_ansible() {
+    type ansible-playbook
+}
+
 function test_zip() {
     type unzip
     type zip
@@ -8,6 +12,7 @@ function test_zip() {
 }
 
 function main() {
+    test_ansible
     test_zip
 }
 
