@@ -9,6 +9,7 @@ jobs:
   lint:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v3
       - run: sudo apt-add-repository --yes --update ppa:ansible/ansible
       - run: sudo apt install --yes --no-install-recommends ansible-lint
       - run: ansible-lint playbooks/site.yml
